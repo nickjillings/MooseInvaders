@@ -1,6 +1,24 @@
 var AngularInterface = angular.module("MooseInvaders", []);
+var audioContext = new AudioContext();
 var Shooter = new Image();
 Shooter.src = "img/shooter.png";
+var mooseBuffer;
+var outGain = audioContext.createGain();
+outGain.connect(audioContext.destination);
+(function () {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "audio/moose.mp3");
+    xhr.onload = function (data) {
+        if (xhr.status !== 200) {
+            throw ("WAHH");
+        }
+        audioContext.decodeAudioData(data.target.response).then(function (buffer) {
+            mooseBuffer = buffer;
+        });
+    }
+    xhr.responseType = "arraybuffer";
+    xhr.send();
+})();
 
 var Controller = new(function () {
     var Mooses = [];
@@ -23,8 +41,6 @@ var Controller = new(function () {
         fires: 0,
         hits: 0
     };
-
-    function cleanupLasers() {}
 
     window.onkeypress = function (e) {
         if (e.key === "ArrowLeft") {
@@ -156,6 +172,19 @@ var Controller = new(function () {
 })();
 
 var MooseSprite = function (x, y, w, h, hp) {
+
+    function dead() {
+        var bufferSource;
+        if (mooseBuffer) {
+            bufferSource = audioContext.createBufferSource();
+            bufferSource.buffer = mooseBuffer;
+            bufferSource.connect(outGain);
+            bufferSource.oneneded = function () {
+                bufferSource = undefined;
+            }
+            bufferSource.start(0);
+        }
+    }
     Object.defineProperties(this, {
         "moveRight": {
             "value": function (p) {
@@ -187,12 +216,15 @@ var MooseSprite = function (x, y, w, h, hp) {
         "hit": {
             "value": function (cost) {
                 hp -= cost;
+                if (hp <= 0) {
+                    dead();
+                }
                 return hp;
             }
         },
         "checkInBounds": {
             "value": function (dx, dy) {
-                if (hp === 0) {
+                if (hp <= 0) {
                     return false;
                 }
                 return (dx >= x && dx <= x + w && dy >= y && dy <= y + h);
@@ -208,7 +240,7 @@ AngularInterface.controller("window", ["$scope", "$window", "$element", function
 
 for (var y = 50; y < window.innerHeight - 400; y += 100) {
     for (var x = 50; x < window.innerWidth - 400; x += 100) {
-        Controller.mooses.push(new MooseSprite(x, y, 50, 43, 100));
+        Controller.mooses.push(new MooseSprite(x, y, 50, 43, 50));
     }
 }
 
