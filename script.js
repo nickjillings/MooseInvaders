@@ -69,16 +69,16 @@ var Controller = new(function () {
             }
             time = delta;
             var edges = Mooses.reduce(function (a, moose) {
-                a.x = Math.min(a.x, moose.coords.x);
-                a.y = Math.max(a.y, moose.coords.y);
+                a.left = Math.min(a.left, moose.coords.x);
+                a.right = Math.max(a.right, moose.coords.x);
                 return a;
             }, {
-                x: window.innerWidth,
-                y: 0
+                left: window.innerWidth,
+                right: 0
             });
-            if (direction == "Right" && edges.x >= (window.innerWidth - 100)) {
+            if (direction == "Right" && edges.right >= (window.innerWidth - 100)) {
                 direction = "Left";
-            } else if (direction == "Left" && edges.x <= 100) {
+            } else if (direction == "Left" && edges.left <= 100) {
                 direction = "Right";
             }
         }
