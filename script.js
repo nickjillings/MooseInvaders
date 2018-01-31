@@ -76,9 +76,9 @@ var Controller = new(function () {
                 x: window.innerWidth,
                 y: 0
             });
-            if (direction == "Right" && a.y >= (window.innerWidth - 100)) {
+            if (direction == "Right" && edges.y >= (window.innerWidth - 100)) {
                 direction = "Left";
-            } else if (direction == "Left" && a.x <= 100) {
+            } else if (direction == "Left" && edges.x <= 100) {
                 direction = "Right";
             }
         }
