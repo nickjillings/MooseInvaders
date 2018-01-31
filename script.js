@@ -69,8 +69,10 @@ var Controller = new(function () {
             }
             time = delta;
             var edges = Mooses.reduce(function (a, moose) {
-                a.left = Math.min(a.left, moose.coords.x);
-                a.right = Math.max(a.right, moose.coords.x);
+                if (moose.hp > 0) {
+                    a.left = Math.min(a.left, moose.coords.x);
+                    a.right = Math.max(a.right, moose.coords.x);
+                }
                 return a;
             }, {
                 left: window.innerWidth,
@@ -222,6 +224,7 @@ var MooseSprite = function (x, y, w, h, hp) {
                 hp -= cost;
                 if (hp <= 0) {
                     dead();
+                    hp = 0;
                 }
                 return hp;
             }
