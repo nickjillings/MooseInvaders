@@ -61,7 +61,7 @@ var Controller = new(function () {
 
     function moveMoosesHorizontal() {
         var delta = new Date();
-        if ((delta - time) > 100) {
+        if ((delta - time) > 10) {
             if (direction === "Right") {
                 moveMoosesRight(5);
             } else {
@@ -76,7 +76,7 @@ var Controller = new(function () {
                 x: window.innerWidth,
                 y: 0
             });
-            if (direction == "Right" && edges.y >= (window.innerWidth - 100)) {
+            if (direction == "Right" && edges.x >= (window.innerWidth - 100)) {
                 direction = "Left";
             } else if (direction == "Left" && edges.x <= 100) {
                 direction = "Right";
