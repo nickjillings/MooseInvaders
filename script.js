@@ -68,14 +68,18 @@ var Controller = new(function () {
                 moveMoosesLeft(5);
             }
             time = delta;
-            mooveIter++;
-            if (mooveIter > 4) {
-                mooveIter = 0;
-                if (direction === "Right") {
-                    direction = "Left";
-                } else {
-                    direction = "Right";
-                }
+            var edges = Mooses.reduce(function (a, moose) {
+                a.x = Math.min(a.x, moose.coords.x);
+                a.y = Math.max(a.y, moose.coords.y);
+                return a;
+            } {
+                x: window.innerWidth,
+                y: 0
+            });
+            if (direction == "Right" && a.y >= (window.innerWidth - 100)) {
+                direction = "Left";
+            } else if (direction == "Left" && a.x <= 100) {
+                direction = "Right";
             }
         }
     }
