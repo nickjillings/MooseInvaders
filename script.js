@@ -72,7 +72,7 @@ var Controller = new(function () {
                 a.x = Math.min(a.x, moose.coords.x);
                 a.y = Math.max(a.y, moose.coords.y);
                 return a;
-            } {
+            }, {
                 x: window.innerWidth,
                 y: 0
             });
