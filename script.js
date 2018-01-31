@@ -61,11 +61,11 @@ var Controller = new(function () {
 
     function moveMoosesHorizontal() {
         var delta = new Date();
-        if ((delta - time) > 1000) {
+        if ((delta - time) > 100) {
             if (direction === "Right") {
-                moveMoosesRight(50);
+                moveMoosesRight(5);
             } else {
-                moveMoosesLeft(50);
+                moveMoosesLeft(5);
             }
             time = delta;
             mooveIter++;
